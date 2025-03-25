@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"todo/data"
+	"todo/logic"
 	"todo/server"
 
 	"github.com/labstack/echo/v4"
@@ -15,13 +16,15 @@ func main() {
 		log.Fatal("Error with starting prepearing environment")
 	}
 
-	db := data.NewDatabse(connString)
-	defer db.Conn.Close(context.Background())
+	database := data.NewDatabse(connString)
+	defer database.Conn.Close(context.Background())
 
-	s := server.NewServer(db)
+	handler := logic.NewHandler(database)
+	server := server.NewServer(handler)
 
 	e := echo.New()
-	e.POST("/api/create", s.CreateTask)
+	e.POST("/api/create", server.CreateTask)
+	e.POST("/api/remove", server.RemoveTaskById)
 
 	e.Logger.Fatal(e.Start(":3711"))
 }

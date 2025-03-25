@@ -2,32 +2,33 @@ package server
 
 import (
 	"net/http"
-	"todo/data"
+	"todo/logic"
 	"todo/models"
 
 	"github.com/labstack/echo/v4"
 )
 
 type MyServer struct {
-	db *data.MyDatabase
+	handler *logic.MyHandler
 }
 
-func NewServer(_database *data.MyDatabase) *MyServer {
+func NewServer(_handler *logic.MyHandler) *MyServer {
 	return &MyServer{
-		db: _database,
+		handler: _handler,
 	}
 }
 
 func (s *MyServer) CreateTask(c echo.Context) error {
 	var data models.HelperCreateTask
 	if err := c.Bind(&data); err != nil {
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": "invalid request"})
-	}
-
-	err := s.db.CreateTaskDB(data)
-	if err != nil {
-		// todo error with adding to database
+		return c.JSON(http.StatusBadRequest, "error invalid request")
 	}
 
 	return c.JSON(http.StatusCreated, data)
+}
+
+func (s *MyServer) RemoveTaskById(c echo.Context) error {
+	var id int
+
+	return c.JSON(http.StatusCreated, id)
 }

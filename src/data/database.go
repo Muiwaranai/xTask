@@ -2,6 +2,7 @@ package data
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"todo/models"
 
@@ -32,5 +33,13 @@ func (db *MyDatabase) CreateTaskDB(task models.HelperCreateTask) error {
 		return err
 	}
 
+	return nil
+}
+
+func (db *MyDatabase) RemoveTaskDB(id int) error {
+	query := `
+		Remove task from db
+	`
+	fmt.Println(query)
 	return nil
 }
