@@ -16,7 +16,7 @@ type MyDatabase struct {
 func NewDatabse(connString string) *MyDatabase {
 	conn, err := pgx.Connect(context.Background(), connString)
 	if err != nil {
-		log.Fatal("Error with connection", err)
+		log.Println("Error with connection", err)
 	}
 
 	return &MyDatabase{Conn: conn}

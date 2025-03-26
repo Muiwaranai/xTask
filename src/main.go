@@ -7,16 +7,17 @@ import (
 	"todo/logic"
 	"todo/server"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
 
 func main() {
-	err := setEnv() // connString
+	err := godotenv.Load("../build/.env")
 	if err != nil {
-		log.Fatal("Error with starting prepearing environment")
+		log.Println("Error with setting env", err)
 	}
 
-	database := data.NewDatabse(connString)
+	database := data.NewDatabse(genConnectionString())
 	defer database.Conn.Close(context.Background())
 
 	handler := logic.NewHandler(database)
