@@ -7,6 +7,7 @@ import (
 	"todo/logic"
 	"todo/server"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 )
@@ -21,11 +22,11 @@ func main() {
 	defer database.Conn.Close(context.Background())
 
 	handler := logic.NewHandler(database)
-	server := server.NewServer(handler)
+	server := server.NewServer(handler, validator.New())
 
 	e := echo.New()
-	e.POST("/api/create", server.CreateTask)
-	e.POST("/api/remove", server.RemoveTaskById)
+	e.POST("/api/create", server.ServerCreateTask)
+	e.DELETE("/api/remove", server.ServerRemoveTaskById)
 
 	e.Logger.Fatal(e.Start(":3711"))
 }
